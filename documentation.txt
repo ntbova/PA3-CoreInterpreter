@@ -1,0 +1,56 @@
+documentation.txt:
+
+The Interpreter program builds upon the core Tokenizer and Parse code used in
+for PA1 and PA2 in order to execute upon parsed CORE code. In a similar style to
+the Parse API, each class the inherits from Node contains their own execute() function
+that each work slightly differently from each other. For example, the execute function
+for CondNode evaluates the conditional statement and returns a bool value based on
+whether this conditional is true or not. For IdNode, execute returns a string that
+contains the name of the identifier. Each Node based class as a different implementation
+based on what is needed. Program execution stops for InNode execute where the user is
+expected to input values for a given identifier, while OutNode execute will output the
+value for whatever identifier is used.
+
+All included libraries are from the C++ std library
+
+API of Node based classes:
+
+bool startExecute(Tokenizer *t);
+	Used by int main to start the execute process. Provides a pointer to a tokenizer 
+	object that has already had its tokens processed.
+	
+string TerminalErrors [NUM_TERMS]
+	String array of errors used by terminateReport function. First 32 numbers correspond
+	to missing terminals within tokens (e.g. 1 is program, 2 is begin, etc.). Remaining
+	indexs are used for additional errors (e.g. junk tokens after pgroam end, invalid
+	comparsion operations, etc.).
+	
+static map<string,int> symtab
+	Map that associates identifier names with their value. Values are initialized to a 
+	min value of int. This is checked to see if the ID is actually initialized during
+	runtime when needed.
+	
+void terminateReport(int errorNumber);
+	Prints message of appropriate index from TerminalErrors and then exits the program
+
+ProgramNode *pn;
+	Pointer to ProgramNode class. Each valid Code program will only have on ProgramNode
+	nonterminal, so it is placed here so that it can be initialized by startParse for
+	parsing. This will stay in memory for when startPrint gets called as well.
+	
+int alt
+	Alt number for a given nonterminal. Set during parse function, and used by print function
+	to determine what should be printed to cout. Nonterminals with only one alternative do not
+	contain this variable.
+	
+void parse(Tokenizer *t)
+	Parses based on the given child Node that it is contained in, based on tokenizer pointer
+	*t. Each inherited node from Node contains it's own implementation of parse based on the core
+	grammar.
+	
+void print()
+	Paints based on the given child Node that it is contained in, based on tokenizer pointer
+	*t. Each inherited node from Node contains it's own implementation of print based on the core
+	grammar.
+	
+
